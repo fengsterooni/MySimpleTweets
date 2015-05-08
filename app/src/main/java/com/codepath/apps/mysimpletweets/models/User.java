@@ -26,17 +26,16 @@ public class User {
     }
 
     public static User fromJSON(JSONObject json) {
-        User u = new User();
+        User user = new User();
         try {
-            u.name = json.getString("name");
-
-            u.uid = json.getLong("id");
-            u.screenName = json.getString("screen_name");
-            u.profileImageUrl = json.getString("profile_image_url");
+            user.name = json.getString("name");
+            user.uid = json.getLong("id");
+            user.screenName = json.getString("screen_name");
+            user.profileImageUrl = json.getString("profile_image_url");
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        return u;
+        return user;
     }
 }
