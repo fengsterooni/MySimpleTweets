@@ -4,35 +4,20 @@
     android:layout_height="match_parent"
     tools:context="com.codepath.apps.mysimpletweets.activities.TimelineActivity">
 
-
-    <ListView
-        android:id="@+id/lvTweets"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/linearLayout"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true" />
-
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentStart="true"
         android:layout_margin="8dp"
+        android:layout_alignParentBottom="true"
         android:orientation="horizontal">
 
         <EditText
             android:id="@+id/etCompose"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:hint="@string/text_compose"
             android:layout_weight="1"
+            android:hint="@string/text_compose"
             android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
 
@@ -51,5 +36,23 @@
             android:alpha="0.3"
             android:src="@drawable/ic_camera_alt_black_24dp" />
     </LinearLayout>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeContainter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/linearLayout" >
+
+        <ListView
+            android:id="@+id/lvTweets"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/linearLayout"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true" />
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

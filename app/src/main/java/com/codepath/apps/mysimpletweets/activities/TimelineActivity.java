@@ -2,6 +2,7 @@ package com.codepath.apps.mysimpletweets.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -9,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.TwitterApplication;
@@ -29,12 +31,17 @@ import butterknife.InjectView;
 
 
 public class TimelineActivity extends ActionBarActivity {
-
+    private final int TWEET_REQUEST = 100;
     private TwitterClient client;
     private ArrayList<Tweet> tweets;
     private TweetsArrayAdapter aTweets;
-    @InjectView(R.id.lvTweets) ListView lvTweets;
-    @InjectView(R.id.etCompose) EditText etCompose;
+
+    @InjectView(R.id.lvTweets)
+    ListView lvTweets;
+    @InjectView(R.id.etCompose)
+    EditText etCompose;
+    @InjectView(R.id.swipeContainter)
+    SwipeRefreshLayout swipeContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,17 +67,39 @@ public class TimelineActivity extends ActionBarActivity {
             }
         });
 
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                fetchTimelineAsync(0);
+            }
+        });
+
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
         populateTimeline(0, 1);
     }
 
-    private void populateTimeline(long maxId, long sinceId) {
+    private void fetchTimelineAsync(int i) {
+        populateTimeline(0, 1);
+    }
+
+    private void populateTimeline(final long maxId, long sinceId) {
         client.getHomeTimeline(maxId, sinceId, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
-                Log.d("DEBUG", json.toString());
+//                Log.d("DEBUG", json.toString());
+                if (maxId == 0)
+                    aTweets.clear();
+
                 aTweets.addAll(Tweet.fromJSONArray(json));
-                Log.d("DEBUG", aTweets.toString());
+//                Log.d("DEBUG", aTweets.toString());
                 Log.d("DEBUG", "SIZE OF THE JSON IS: " + json.length());
+
+                if (maxId == 0)
+                    swipeContainer.setRefreshing(false);
             }
 
             @Override
@@ -80,13 +109,34 @@ public class TimelineActivity extends ActionBarActivity {
         });
     }
 
-    private void customLoadMoreDataFromApi(int page) {
+    private void customLoadMoreDataFromApi(int offset) {
+        long maxId = 0;
+        long sinceId = 0;
+        int count = tweets.size();
+        if (count > 0) {
+            maxId = tweets.get(count - 1).getUid() - 1;
+            sinceId = 1;
+        }
+
+        populateTimeline(maxId, sinceId);
     }
 
 
     public void onCompose(View view) {
         Intent i = new Intent(this, ComposeActivity.class);
-        startActivity(i);
+        // startActivity(i);
+        startActivityForResult(i, TWEET_REQUEST);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == TWEET_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                String newTweet = data.getStringExtra("NewTweet");
+                Toast.makeText(this, newTweet, Toast.LENGTH_SHORT).show();
+
+            }
+            // else RESULT_CANCELED, nothing changed
+        }
     }
 
     @Override

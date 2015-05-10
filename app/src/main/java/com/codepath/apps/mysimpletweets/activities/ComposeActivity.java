@@ -62,12 +62,17 @@ public class ComposeActivity extends ActionBarActivity {
         btTweet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String tweet = tweetText.getText().toString();
+                final String tweet = tweetText.getText().toString();
                 client.postStatusUpdate(tweet, new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
                         Log.d("DEBUG", json.toString());
+                        /*
+                        Intent data = new Intent();
+                        data.putExtra("newTweet", tweet);
+                        setResult(RESULT_OK, data);
                         ComposeActivity.this.finish();
+                        */
                     }
 
                     @Override
@@ -75,6 +80,7 @@ public class ComposeActivity extends ActionBarActivity {
                         Log.d("DEBUG", errorResponse.toString());
                     }
                 });
+                ComposeActivity.this.finish();
             }
         });
     }
