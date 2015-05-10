@@ -9,6 +9,22 @@ public class User {
     private String screenName;
     private String profileImageUrl;
 
+
+    public static User fromJSON(JSONObject json) {
+        User user = new User();
+        try {
+            user.name = json.getString("name");
+            user.uid = json.getLong("id");
+            user.screenName = json.getString("screen_name");
+            user.profileImageUrl = json.getString("profile_image_url");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return user;
+    }
+
+
     public String getName() {
         return name;
     }
@@ -23,19 +39,5 @@ public class User {
 
     public long getUid() {
         return uid;
-    }
-
-    public static User fromJSON(JSONObject json) {
-        User user = new User();
-        try {
-            user.name = json.getString("name");
-            user.uid = json.getLong("id");
-            user.screenName = json.getString("screen_name");
-            user.profileImageUrl = json.getString("profile_image_url");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return user;
     }
 }

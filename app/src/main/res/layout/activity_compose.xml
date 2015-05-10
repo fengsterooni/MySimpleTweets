@@ -1,0 +1,74 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="16dp"
+    tools:context="com.codepath.apps.mysimpletweets.activities.ComposeActivity">
+
+
+    <ImageView
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:id="@+id/ivImageComp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="32dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="@color/blue" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/tvUserComp"
+        android:textStyle="bold"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@id/ivImageComp"
+        android:layout_toEndOf="@id/ivImageComp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/tvscreenComp"
+        android:layout_alignBottom="@id/ivImageComp"
+        android:layout_alignLeft="@id/tvUserComp"
+        android:layout_alignStart="@id/tvUserComp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_tweet"
+        android:id="@+id/btTweet"
+        android:layout_alignBottom="@id/tvscreenComp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="8dp"
+        android:background="@color/twitter_primary"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/tvCount"
+        android:gravity="center_vertical"
+        android:layout_alignBottom="@id/btTweet"
+        android:layout_alignTop="@id/btTweet"
+        android:layout_toLeftOf="@id/btTweet"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/etTweetComp"
+        android:hint="@string/text_compose"
+        android:gravity="top|start"
+        android:layout_below="@+id/ivImageComp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+</RelativeLayout>

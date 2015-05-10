@@ -53,7 +53,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet>{
         }
 
         User user = tweet.getUser();
-        viewHolder.userName.setText(user.getScreenName());
+        viewHolder.userName.setText("@" + user.getScreenName());
         viewHolder.screenName.setText(user.getName());
         viewHolder.body.setText(tweet.getBody());
         viewHolder.profileImage.setImageResource(android.R.color.transparent);
