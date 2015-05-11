@@ -8,9 +8,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.TwitterApplication;
@@ -57,6 +57,18 @@ public class TimelineActivity extends ActionBarActivity {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
                 customLoadMoreDataFromApi(page);
+            }
+        });
+
+        lvTweets.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.i("INFO", "Toched!");
+                Tweet tweet = tweets.get(position);
+                Log.i("INFO", tweet.toString());
+                Intent intent = new Intent(TimelineActivity.this, TweetDetailsActivity.class);
+                intent.putExtra("tweet", tweet);
+                startActivity(intent);
             }
         });
 
@@ -131,9 +143,10 @@ public class TimelineActivity extends ActionBarActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == TWEET_REQUEST) {
             if (resultCode == RESULT_OK) {
-                String newTweet = data.getStringExtra("NewTweet");
-                Toast.makeText(this, newTweet, Toast.LENGTH_SHORT).show();
-
+                Tweet tweet = data.getParcelableExtra("tweet");
+                aTweets.insert(tweet, 0);
+                // Toast.makeText(this, newTweet, Toast.LENGTH_SHORT).show();
+                // populateTimeline(0, 1);
             }
             // else RESULT_CANCELED, nothing changed
         }

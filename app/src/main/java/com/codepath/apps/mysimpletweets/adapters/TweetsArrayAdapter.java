@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.models.User;
+import com.codepath.apps.mysimpletweets.views.LinkifiedTextView;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
@@ -25,11 +26,16 @@ import butterknife.InjectView;
 public class TweetsArrayAdapter extends ArrayAdapter<Tweet>{
 
     static class ViewHolder {
-        @InjectView(R.id.ivProfileImage) ImageView profileImage;
-        @InjectView(R.id.tvUserName) TextView userName;
-        @InjectView(R.id.tvScreenName) TextView screenName;
-        @InjectView(R.id.tvBody) TextView body;
-        @InjectView(R.id.tvTime) TextView time;
+        @InjectView(R.id.ivProfileImage)
+        ImageView profileImage;
+        @InjectView(R.id.tvUserName)
+        TextView userName;
+        @InjectView(R.id.tvScreenName)
+        TextView screenName;
+        @InjectView(R.id.tvBody)
+        LinkifiedTextView body;
+        @InjectView(R.id.tvTime)
+        TextView time;
 
         public ViewHolder(View view) {
             ButterKnife.inject(this, view);

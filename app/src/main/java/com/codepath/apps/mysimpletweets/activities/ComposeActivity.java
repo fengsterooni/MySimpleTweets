@@ -1,6 +1,7 @@
 package com.codepath.apps.mysimpletweets.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -16,11 +17,11 @@ import android.widget.TextView;
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.TwitterApplication;
 import com.codepath.apps.mysimpletweets.TwitterClient;
+import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
 
 import org.apache.http.Header;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import butterknife.ButterKnife;
@@ -65,14 +66,13 @@ public class ComposeActivity extends ActionBarActivity {
                 final String tweet = tweetText.getText().toString();
                 client.postStatusUpdate(tweet, new JsonHttpResponseHandler() {
                     @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
                         Log.d("DEBUG", json.toString());
-                        /*
-                        Intent data = new Intent();
-                        data.putExtra("newTweet", tweet);
-                        setResult(RESULT_OK, data);
-                        ComposeActivity.this.finish();
-                        */
+                        Tweet tweet = Tweet.fromJSON(json);
+                        Intent intent = new Intent();
+                        intent.putExtra("tweet", tweet);
+                        setResult(RESULT_OK, intent);
+                        finish();
                     }
 
                     @Override
@@ -80,7 +80,7 @@ public class ComposeActivity extends ActionBarActivity {
                         Log.d("DEBUG", errorResponse.toString());
                     }
                 });
-                ComposeActivity.this.finish();
+                // ComposeActivity.this.finish();
             }
         });
     }
