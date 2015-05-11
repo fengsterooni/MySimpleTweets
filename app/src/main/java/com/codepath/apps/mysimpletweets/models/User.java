@@ -3,13 +3,22 @@ package com.codepath.apps.mysimpletweets.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class User implements Parcelable{
+@Table(name = "User")
+public class User extends Model implements Parcelable{
+    @Column(name = "Name")
     private String name;
+    @Column(name = "Uid", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
     private long uid;
+    @Column(name = "ScreeName")
     private String screenName;
+    @Column(name = "ProfileImageUrl")
     private String profileImageUrl;
 
 
@@ -20,13 +29,13 @@ public class User implements Parcelable{
             user.uid = json.getLong("id");
             user.screenName = json.getString("screen_name");
             user.profileImageUrl = json.getString("profile_image_url");
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         return user;
     }
-
 
     public String getName() {
         return name;

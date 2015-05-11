@@ -64,7 +64,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet>{
         viewHolder.body.setText(tweet.getBody());
         viewHolder.profileImage.setImageResource(android.R.color.transparent);
         Picasso.with(getContext()).load(user.getProfileImageUrl()).into(viewHolder.profileImage);
-        viewHolder.time.setText(getRelativeTimeAgo(tweet.getCreateAt()));
+        viewHolder.time.setText(getRelativeTimeAgo(tweet.getCreatedAt()));
         return convertView;
     }
 

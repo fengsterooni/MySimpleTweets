@@ -3,24 +3,33 @@ package com.codepath.apps.mysimpletweets.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class Tweet implements Parcelable {
+@Table(name = "Tweet")
+public class Tweet extends Model implements Parcelable {
+    @Column(name = "Body")
     private String body;
+    @Column(name = "Uid", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
     private long uid;
+    @Column(name = "User", onUpdate = Column.ForeignKeyAction.CASCADE, onDelete = Column.ForeignKeyAction.CASCADE)
     private User user;
-    private String createAt;
+    @Column(name = "CreatedAt")
+    private String createdAt;
 
     public String getBody() {
         return body;
     }
 
-    public String getCreateAt() {
-        return createAt;
+    public String getCreatedAt() {
+        return createdAt;
     }
 
     public long getUid() {
@@ -37,7 +46,7 @@ public class Tweet implements Parcelable {
         try {
             tweet.body = jsonObject.getString("text");
             tweet.uid = jsonObject.getLong("id");
-            tweet.createAt = jsonObject.getString("created_at");
+            tweet.createdAt = jsonObject.getString("created_at");
             tweet.user = User.fromJSON(jsonObject.getJSONObject("user"));
 
         } catch (JSONException e) {
@@ -78,7 +87,7 @@ public class Tweet implements Parcelable {
         dest.writeString(this.body);
         dest.writeLong(this.uid);
         dest.writeParcelable(this.user, flags);
-        dest.writeString(this.createAt);
+        dest.writeString(this.createdAt);
     }
 
     public Tweet() {
@@ -88,7 +97,7 @@ public class Tweet implements Parcelable {
         this.body = in.readString();
         this.uid = in.readLong();
         this.user = in.readParcelable(User.class.getClassLoader());
-        this.createAt = in.readString();
+        this.createdAt = in.readString();
     }
 
     public static final Creator<Tweet> CREATOR = new Creator<Tweet>() {
