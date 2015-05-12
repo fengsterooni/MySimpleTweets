@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.TwitterApplication;
 import com.codepath.apps.mysimpletweets.TwitterClient;
@@ -72,6 +73,12 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
     // i.e Display an error dialog or toast
     @Override
     public void onLoginFailure(Exception e) {
+        new MaterialDialog.Builder(LoginActivity.this)
+                .title(R.string.error_login_title)
+                .content(R.string.error_login_message)
+                .positiveText(R.string.OK)
+                .show();
+
         e.printStackTrace();
     }
 

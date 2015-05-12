@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.activeandroid.query.Select;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.TwitterApplication;
 import com.codepath.apps.mysimpletweets.TwitterClient;
@@ -99,6 +100,11 @@ public class TimelineActivity extends ActionBarActivity {
             populateTimeline(0, 1);
 
         } else {
+            new MaterialDialog.Builder(TimelineActivity.this)
+                    .title(R.string.no_network_title)
+                    .content(R.string.no_network_activate)
+                    .positiveText(R.string.OK)
+                    .show();
             List<Tweet> queryResults = new Select().from(Tweet.class)
                     .execute();
             Log.i("INFO", "queryResults SIZE " + queryResults.size());
