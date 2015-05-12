@@ -15,30 +15,15 @@ import java.util.ArrayList;
 
 @Table(name = "Tweet")
 public class Tweet extends Model implements Parcelable {
-    @Column(name = "Body")
-    private String body;
+
     @Column(name = "Uid", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
     private long uid;
     @Column(name = "User", onUpdate = Column.ForeignKeyAction.CASCADE, onDelete = Column.ForeignKeyAction.CASCADE)
     private User user;
     @Column(name = "CreatedAt")
     private String createdAt;
-
-    public String getBody() {
-        return body;
-    }
-
-    public String getCreatedAt() {
-        return createdAt;
-    }
-
-    public long getUid() {
-        return uid;
-    }
-
-    public User getUser() {
-        return user;
-    }
+    @Column(name = "Body")
+    private String body;
 
     // Deserialize the JSON
     public static Tweet fromJSON(JSONObject jsonObject) {
@@ -47,12 +32,12 @@ public class Tweet extends Model implements Parcelable {
             tweet.body = jsonObject.getString("text");
             tweet.uid = jsonObject.getLong("id");
             tweet.createdAt = jsonObject.getString("created_at");
-            tweet.user = User.fromJSON(jsonObject.getJSONObject("user"));
+            tweet.user = User.findOrCreateFromJson(jsonObject.getJSONObject("user"));
+            tweet.save();
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         return tweet;
     }
 
@@ -77,6 +62,22 @@ public class Tweet extends Model implements Parcelable {
         return tweets;
     }
 
+    public String getBody() {
+        return body;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public long getUid() {
+        return uid;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -84,20 +85,20 @@ public class Tweet extends Model implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.body);
         dest.writeLong(this.uid);
-        dest.writeParcelable(this.user, flags);
+        dest.writeParcelable(this.user, 0);
         dest.writeString(this.createdAt);
+        dest.writeString(this.body);
     }
 
     public Tweet() {
     }
 
     private Tweet(Parcel in) {
-        this.body = in.readString();
         this.uid = in.readLong();
         this.user = in.readParcelable(User.class.getClassLoader());
         this.createdAt = in.readString();
+        this.body = in.readString();
     }
 
     public static final Creator<Tweet> CREATOR = new Creator<Tweet>() {

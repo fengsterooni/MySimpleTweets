@@ -6,21 +6,22 @@ import android.os.Parcelable;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Select;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 @Table(name = "User")
 public class User extends Model implements Parcelable{
+
+    @Column(name = "Uid", unique = true)
+    private long uid;
     @Column(name = "Name")
     private String name;
-    @Column(name = "Uid", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
-    private long uid;
     @Column(name = "ScreeName")
     private String screenName;
     @Column(name = "ProfileImageUrl")
     private String profileImageUrl;
-
 
     public static User fromJSON(JSONObject json) {
         User user = new User();
@@ -29,12 +30,24 @@ public class User extends Model implements Parcelable{
             user.uid = json.getLong("id");
             user.screenName = json.getString("screen_name");
             user.profileImageUrl = json.getString("profile_image_url");
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         return user;
+    }
+
+    public static User findOrCreateFromJson(JSONObject json) {
+        User user = User.fromJSON(json);
+
+        User existingUser =
+                new Select().from(User.class).where("Uid = ?", user.uid).executeSingle();
+        if (existingUser != null)
+            return existingUser;
+        else {
+            user.save();
+            return user;
+        }
     }
 
     public String getName() {
@@ -60,8 +73,8 @@ public class User extends Model implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.name);
         dest.writeLong(this.uid);
+        dest.writeString(this.name);
         dest.writeString(this.screenName);
         dest.writeString(this.profileImageUrl);
     }
@@ -70,8 +83,8 @@ public class User extends Model implements Parcelable{
     }
 
     private User(Parcel in) {
-        this.name = in.readString();
         this.uid = in.readLong();
+        this.name = in.readString();
         this.screenName = in.readString();
         this.profileImageUrl = in.readString();
     }

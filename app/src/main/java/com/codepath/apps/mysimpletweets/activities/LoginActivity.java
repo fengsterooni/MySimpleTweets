@@ -59,9 +59,10 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Log.d("DEBUG", errorResponse.toString());
+                // Log.d("DEBUG", errorResponse.toString());
             }
         });
+
         Intent i = new Intent(this, TimelineActivity.class);
         startActivity(i);
         // Toast.makeText(this, "Success!", Toast.LENGTH_SHORT).show();

@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.activeandroid.query.Select;
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.TwitterApplication;
 import com.codepath.apps.mysimpletweets.TwitterClient;
@@ -25,6 +26,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -82,7 +84,9 @@ public class TimelineActivity extends ActionBarActivity {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                fetchTimelineAsync(0);
+                if (TwitterApplication.isNetworkAvailable()) {
+                    fetchTimelineAsync(0);
+                }
             }
         });
 
@@ -91,7 +95,17 @@ public class TimelineActivity extends ActionBarActivity {
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-        populateTimeline(0, 1);
+        if (TwitterApplication.isNetworkAvailable()) {
+            populateTimeline(0, 1);
+
+        } else {
+            List<Tweet> queryResults = new Select().from(Tweet.class)
+                    .execute();
+            Log.i("INFO", "queryResults SIZE " + queryResults.size());
+            if (queryResults.size() > 0) {
+                aTweets.addAll(queryResults);
+            }
+        }
     }
 
     private void fetchTimelineAsync(int i) {
@@ -99,15 +113,15 @@ public class TimelineActivity extends ActionBarActivity {
     }
 
     private void populateTimeline(final long maxId, long sinceId) {
+
         client.getHomeTimeline(maxId, sinceId, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
-//                Log.d("DEBUG", json.toString());
+
                 if (maxId == 0)
                     aTweets.clear();
 
                 aTweets.addAll(Tweet.fromJSONArray(json));
-//                Log.d("DEBUG", aTweets.toString());
                 Log.d("DEBUG", "SIZE OF THE JSON IS: " + json.length());
 
                 if (maxId == 0)
@@ -116,7 +130,8 @@ public class TimelineActivity extends ActionBarActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Log.d("DEBUG", errorResponse.toString());
+                if (errorResponse != null)
+                    Log.d("DEBUG", errorResponse.toString());
             }
         });
     }

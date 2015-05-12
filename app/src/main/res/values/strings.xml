@@ -11,4 +11,11 @@
     <string name="label_tweet">Tweet</string>
     <string name="preference_file_key">cpsimpletweets</string>
     <string name="title_activity_tweet_details">TweetDetailsActivity</string>
+    <string name="no_network_title">No Network</string>
+    <string name="no_network_message">No Internet, please check your network connection</string>
+    <string name="error_loading">Error Image Loading</string>
+    <string name="image_loading_failed">Having problem loading the image</string>
+    <string name="welcome">Welcome</string>
+    <string name="welcome_message">Please use settings to set search filter and use searchView to set search query</string>
+    <string name="OK">OK</string>
 </resources>
