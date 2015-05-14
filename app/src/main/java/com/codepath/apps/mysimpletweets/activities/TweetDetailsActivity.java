@@ -1,9 +1,11 @@
 package com.codepath.apps.mysimpletweets.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,6 +32,18 @@ public class TweetDetailsActivity extends ActionBarActivity {
     LinkifiedTextView body;
     @InjectView(R.id.tvTime)
     TextView time;
+    @InjectView(R.id.tvNumRetweet)
+    TextView retweets;
+    @InjectView(R.id.tvNumFavorites)
+    TextView refavor;
+    @InjectView(R.id.ivReply)
+    ImageView iVReply;
+    @InjectView(R.id.ivRetweet)
+    ImageView ivRetweet;
+    @InjectView(R.id.ivFavorite)
+    ImageView ivFavorite;
+    @InjectView(R.id.ivShare)
+    ImageView ivShare;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,15 +52,27 @@ public class TweetDetailsActivity extends ActionBarActivity {
 
         ButterKnife.inject(this);
 
-        Tweet tweet = getIntent().getParcelableExtra("tweet");
+        final Tweet tweet = getIntent().getParcelableExtra("tweet");
         if (tweet != null) {
             User user = tweet.getUser();
             userName.setText(user.getName());
-            screenName.setText(user.getScreenName());
+            screenName.setText("@" + user.getScreenName());
             Picasso.with(TweetDetailsActivity.this).load(user.getProfileImageUrl()).into(profileImage);
             body.setText(tweet.getBody());
             Date date = DateUtils.getDateFromString(tweet.getCreatedAt());
             time.setText(DateUtils.getShortDateTimeString(date));
+            retweets.setText("" + tweet.getNumRetweet());
+            refavor.setText("" + tweet.getNumFavorites());
+            iVReply.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(TweetDetailsActivity.this, ComposeActivity.class);
+                    intent.putExtra("uid", tweet.getUid());
+                    intent.putExtra("user", tweet.getUser().getScreenName());
+                    startActivity(intent);
+                    finish();
+                }
+            });
         }
     }
 

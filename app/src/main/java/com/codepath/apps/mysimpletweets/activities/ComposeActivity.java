@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,8 +41,13 @@ public class ComposeActivity extends ActionBarActivity {
     EditText tweetText;
     @InjectView(R.id.btTweet)
     Button btTweet;
+    @InjectView(R.id.tvCount)
+    TextView tCount;
 
     TwitterClient client;
+    String atString = null;
+    long uid = 0;
+    int TWEET_LENGTH = 140;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +61,17 @@ public class ComposeActivity extends ActionBarActivity {
         String screenName = preferences.getString("screen", "");
         String profileUrl = preferences.getString("profile", "");
 
+        Intent intent = getIntent();
+        uid = intent.getLongExtra("uid", 0);
+        String uScreenName = intent.getStringExtra("user");
+        if (uScreenName != null) {
+            atString = "@" + uScreenName + " ";
+            tweetText.setText(atString);
+            TWEET_LENGTH -= atString.length();
+            tCount.setText("" + TWEET_LENGTH);
+            tweetText.requestFocus();
+        }
+
         client = TwitterApplication.getRestClient();
 
         user.setText(userName);
@@ -64,7 +82,7 @@ public class ComposeActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 final String tweet = tweetText.getText().toString();
-                client.postStatusUpdate(tweet, new JsonHttpResponseHandler() {
+                client.postStatusUpdate(tweet, uid, new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
                         Log.d("DEBUG", json.toString());
@@ -81,6 +99,23 @@ public class ComposeActivity extends ActionBarActivity {
                     }
                 });
                 // ComposeActivity.this.finish();
+            }
+        });
+
+        tweetText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                tCount.setText("" + TWEET_LENGTH);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                tCount.setText("" + (TWEET_LENGTH - tweetText.getText().length()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
     }
