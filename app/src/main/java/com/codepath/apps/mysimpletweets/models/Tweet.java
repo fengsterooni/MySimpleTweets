@@ -38,7 +38,7 @@ public class Tweet extends Model implements Parcelable {
             tweet.createdAt = jsonObject.getString("created_at");
             tweet.user = User.findOrCreateFromJson(jsonObject.getJSONObject("user"));
             tweet.numRetweet = jsonObject.getLong("retweet_count");
-            tweet.numFavorites = jsonObject.getLong("favourites_count");
+            tweet.numFavorites = jsonObject.getLong("favorite_count");
 
             tweet.save();
 
@@ -116,8 +116,8 @@ public class Tweet extends Model implements Parcelable {
         this.user = in.readParcelable(User.class.getClassLoader());
         this.createdAt = in.readString();
         this.body = in.readString();
-        this.numRetweet = in.readInt();
-        this.numFavorites = in.readInt();
+        this.numRetweet = in.readLong();
+        this.numFavorites = in.readLong();
     }
 
     public static final Creator<Tweet> CREATOR = new Creator<Tweet>() {

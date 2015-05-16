@@ -1,6 +1,7 @@
 package com.codepath.apps.mysimpletweets.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codepath.apps.mysimpletweets.R;
+import com.codepath.apps.mysimpletweets.activities.ComposeActivity;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.models.User;
 import com.codepath.apps.mysimpletweets.views.LinkifiedTextView;
@@ -36,6 +38,16 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet>{
         LinkifiedTextView body;
         @InjectView(R.id.tvTime)
         TextView time;
+        @InjectView(R.id.ivReplyItem)
+        ImageView replyItem;
+        @InjectView(R.id.ivRetweetItem)
+        ImageView retweetItem;
+        @InjectView(R.id.tvNumRetweetItem)
+        TextView numRetweet;
+        @InjectView(R.id.ivFavoriteItem)
+        ImageView favoriteItem;
+        @InjectView(R.id.tvNumFavoritesItem)
+        TextView numFavorites;
 
         public ViewHolder(View view) {
             ButterKnife.inject(this, view);
@@ -48,7 +60,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet>{
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Tweet tweet = getItem(position);
+        final Tweet tweet = getItem(position);
         ViewHolder viewHolder;
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_tweet, parent, false);
@@ -65,6 +77,18 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet>{
         viewHolder.profileImage.setImageResource(android.R.color.transparent);
         Picasso.with(getContext()).load(user.getProfileImageUrl()).into(viewHolder.profileImage);
         viewHolder.time.setText(getRelativeTimeAgo(tweet.getCreatedAt()));
+        viewHolder.numRetweet.setText("" + tweet.getNumRetweet());
+        viewHolder.numFavorites.setText("" + tweet.getNumFavorites());
+
+        viewHolder.replyItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), ComposeActivity.class);
+                intent.putExtra("uid", tweet.getUid());
+                intent.putExtra("user", tweet.getUser().getScreenName());
+                getContext().startActivity(intent);
+            }
+        });
         return convertView;
     }
 

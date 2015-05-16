@@ -53,6 +53,10 @@ public class TimelineActivity extends ActionBarActivity {
         ButterKnife.inject(this);
         client = TwitterApplication.getRestClient();
 
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.drawable.ic_icon);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+
         tweets = new ArrayList<>();
         aTweets = new TweetsArrayAdapter(this, tweets);
         lvTweets.setAdapter(aTweets);

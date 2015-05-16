@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -35,7 +36,7 @@ public class TweetDetailsActivity extends ActionBarActivity {
     @InjectView(R.id.tvNumRetweet)
     TextView retweets;
     @InjectView(R.id.tvNumFavorites)
-    TextView refavor;
+    TextView favorites;
     @InjectView(R.id.ivReply)
     ImageView iVReply;
     @InjectView(R.id.ivRetweet)
@@ -44,11 +45,17 @@ public class TweetDetailsActivity extends ActionBarActivity {
     ImageView ivFavorite;
     @InjectView(R.id.ivShare)
     ImageView ivShare;
+    @InjectView(R.id.etDetailReply)
+    EditText etReply;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tweet_details);
+
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.drawable.ic_icon);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
 
         ButterKnife.inject(this);
 
@@ -62,18 +69,28 @@ public class TweetDetailsActivity extends ActionBarActivity {
             Date date = DateUtils.getDateFromString(tweet.getCreatedAt());
             time.setText(DateUtils.getShortDateTimeString(date));
             retweets.setText("" + tweet.getNumRetweet());
-            refavor.setText("" + tweet.getNumFavorites());
+            favorites.setText("" + tweet.getNumFavorites());
             iVReply.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(TweetDetailsActivity.this, ComposeActivity.class);
-                    intent.putExtra("uid", tweet.getUid());
-                    intent.putExtra("user", tweet.getUser().getScreenName());
-                    startActivity(intent);
-                    finish();
+                    reply(tweet);
+                }
+            });
+            etReply.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    reply(tweet);
                 }
             });
         }
+    }
+
+    private void reply(Tweet tweet) {
+        Intent intent = new Intent(TweetDetailsActivity.this, ComposeActivity.class);
+        intent.putExtra("uid", tweet.getUid());
+        intent.putExtra("user", tweet.getUser().getScreenName());
+        startActivity(intent);
+        finish();
     }
 
     @Override

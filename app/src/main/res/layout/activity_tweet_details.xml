@@ -8,6 +8,13 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.codepath.apps.mysimpletweets.activities.TweetDetailsActivity">
 
+    <EditText
+        android:id="@+id/etDetailReply"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
     <ImageView
         android:layout_width="48dp"
         android:layout_height="48dp"
@@ -84,7 +91,7 @@
         android:layout_marginRight="4dp"
         android:textStyle="bold"
         android:textColor="@android:color/black"
-        android:layout_below="@+id/vLine"
+        android:layout_below="@id/vLine"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
