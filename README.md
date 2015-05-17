@@ -1,7 +1,7 @@
 Simple Twitter Client
 =============
 
-This is an Android application to view a Twitter timeline and composing a new tweet.
+This is an Android application for viewing a Twitter timeline and composing a new tweet.
 
 **_Completed user stories:_**
 
