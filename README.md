@@ -46,5 +46,5 @@ This is an Android application for viewing a Twitter timeline and composing a ne
 
 **_Screencast:_**
 
-![screenshot](https://github.com/fengsterooni/mysimpletweets/blob/master/tweets.gif)
+![screenshot](https://github.com/fengsterooni/mysimpletweets/blob/master/Tweets.gif)
 
