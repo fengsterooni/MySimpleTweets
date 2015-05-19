@@ -1,8 +1,6 @@
 package com.codepath.apps.mysimpletweets.activities;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -39,11 +37,15 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
     // i.e Display application "homepage"
     @Override
     public void onLoginSuccess() {
-        TwitterApplication.getRestClient().getVerifyCredentials(new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
-                Log.d("DEBUG", json.toString());
-                User user = User.fromJSON(json);
+        if (TwitterApplication.getOwner() == null) {
+
+            TwitterApplication.getRestClient().getUserInfo(new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
+                    Log.d("DEBUG", json.toString());
+                    User user = User.fromJSON(json);
+                    Log.i("INFO", user.toString());
+                /*
                 if (user != null) {
                     SharedPreferences pref = getApplicationContext()
                             .getSharedPreferences("cpsimpletweets", Context.MODE_PRIVATE);
@@ -55,14 +57,17 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
                     Log.i("INFO", "User: " + user.getName());
                     Log.i("INFO", "Profile: " + user.getProfileImageUrl().toString());
                     Log.i("INFO", "Screen: " + user.getScreenName());
+                }*/
+                    if (user != null)
+                        TwitterApplication.setOwner(user);
                 }
-            }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                // Log.d("DEBUG", errorResponse.toString());
-            }
-        });
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    // Log.d("DEBUG", errorResponse.toString());
+                }
+            });
+        }
 
         Intent i = new Intent(this, TimelineActivity.class);
         startActivity(i);

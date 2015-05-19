@@ -6,106 +6,109 @@
     android:padding="16dp">
 
     <ImageView
+        android:id="@+id/ivProfileImage"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:background="#000"
-        android:id="@+id/ivProfileImage"
-        android:layout_marginRight="16dp" />
+        android:layout_marginRight="16dp"
+        android:background="#000" />
 
     <TextView
+        android:id="@+id/tvScreenName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/tvScreenName"
-        android:textColor="@android:color/black"
-        android:textStyle="bold"
-        android:layout_marginRight="8dp"
-        android:layout_gravity="center_horizontal"
         android:layout_alignTop="@id/ivProfileImage"
-        android:layout_toRightOf="@id/ivProfileImage"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginRight="8dp"
         android:layout_toEndOf="@id/ivProfileImage"
+        android:layout_toRightOf="@id/ivProfileImage"
+        android:text="New Text"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        android:textColor="@android:color/black"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/tvUserName"
+        android:text="New Text"
         android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
     <TextView
+        android:id="@+id/tvUserName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/tvUserName"
-        android:layout_gravity="center_horizontal"
         android:layout_alignTop="@id/ivProfileImage"
-        android:layout_toRightOf="@id/tvScreenName"
+        android:layout_gravity="center_horizontal"
         android:layout_toEndOf="@id/tvScreenName"
+        android:layout_toLeftOf="@id/tvTime"
+        android:layout_toRightOf="@id/tvScreenName"
+        android:layout_toStartOf="@id/tvTime"
+        android:lines="1"
+        android:ellipsize="end"
+        android:text="New Text"
         android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
     <com.codepath.apps.mysimpletweets.views.LinkifiedTextView
+        android:id="@+id/tvBody"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/tvBody"
+        android:layout_below="@id/tvUserName"
+        android:layout_toEndOf="@id/ivProfileImage"
+        android:layout_toRightOf="@id/ivProfileImage"
         android:autoLink="all"
         android:linksClickable="true"
-        android:layout_below="@id/tvUserName"
-        android:layout_toRightOf="@id/ivProfileImage"
-        android:layout_toEndOf="@id/ivProfileImage"
-        android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="New Text"
-        android:id="@+id/tvTime"
-        android:layout_alignTop="@id/tvUserName"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
         android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
     <ImageView
+        android:id="@+id/ivReplyItem"
         android:layout_width="16dp"
         android:layout_height="16dp"
-        android:layout_marginTop="8dp"
-        android:id="@+id/ivReplyItem"
         android:layout_alignLeft="@id/tvScreenName"
         android:layout_below="@id/tvBody"
-        android:src="@drawable/reply_hover"/>
+        android:layout_marginTop="8dp"
+        android:src="@drawable/reply_hover" />
 
     <ImageView
+        android:id="@+id/ivRetweetItem"
         android:layout_width="16dp"
         android:layout_height="16dp"
+        android:layout_alignTop="@id/ivReplyItem"
         android:layout_marginLeft="64dp"
         android:layout_marginRight="8dp"
-        android:id="@+id/ivRetweetItem"
-        android:src="@drawable/retweet_hover"
-        android:layout_alignTop="@id/ivReplyItem"
-        android:layout_toRightOf="@id/ivReplyItem" />
+        android:layout_toRightOf="@id/ivReplyItem"
+        android:src="@drawable/retweet_hover" />
 
     <TextView
+        android:id="@+id/tvNumRetweetItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/tvNumRetweetItem"
+        android:layout_alignTop="@id/ivReplyItem"
         android:layout_marginRight="40dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
         android:layout_toRightOf="@id/ivRetweetItem"
-        android:layout_alignTop="@id/ivReplyItem"/>
+        android:text="New Text"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
 
     <ImageView
+        android:id="@+id/ivFavoriteItem"
         android:layout_width="16dp"
         android:layout_height="16dp"
-        android:layout_marginRight="8dp"
-        android:id="@+id/ivFavoriteItem"
         android:layout_alignTop="@id/ivReplyItem"
-        android:src="@drawable/favorite_hover"
-        android:layout_toRightOf="@id/tvNumRetweetItem" />
+        android:layout_marginRight="8dp"
+        android:layout_toRightOf="@id/tvNumRetweetItem"
+        android:src="@drawable/favorite_hover" />
 
     <TextView
+        android:id="@+id/tvNumFavoritesItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/tvNumFavoritesItem"
-        android:layout_marginRight="4dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-        android:layout_toRightOf="@id/ivFavoriteItem"
         android:layout_alignTop="@id/ivReplyItem"
-        />
+        android:layout_marginRight="4dp"
+        android:layout_toRightOf="@id/ivFavoriteItem"
+        android:text="New Text"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
 
 </RelativeLayout>

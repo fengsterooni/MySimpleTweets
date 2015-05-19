@@ -6,6 +6,7 @@
     <string name="title_activity_timeline">Home Timeline</string>
     <string name="hello_world">Hello world!</string>
     <string name="text_compose">What\'s happening?</string>
+    <string name="action_profile">Profile</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_compose">ComposeActivity</string>
     <string name="label_tweet">Tweet</string>
@@ -18,4 +19,5 @@
     <string name="OK">OK</string>
     <string name="error_login_title">Login Failure</string>
     <string name="error_login_message">Please check your network connection</string>
+    <string name="title_activity_profile">ProfileActivity</string>
 </resources>

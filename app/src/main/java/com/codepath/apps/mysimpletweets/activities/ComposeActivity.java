@@ -1,8 +1,6 @@
 package com.codepath.apps.mysimpletweets.activities;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
@@ -20,6 +18,7 @@ import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.TwitterApplication;
 import com.codepath.apps.mysimpletweets.TwitterClient;
 import com.codepath.apps.mysimpletweets.models.Tweet;
+import com.codepath.apps.mysimpletweets.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
 
@@ -57,11 +56,17 @@ public class ComposeActivity extends ActionBarActivity {
 
         ButterKnife.inject(this);
 
-        SharedPreferences preferences = getApplicationContext()
-                .getSharedPreferences("cpsimpletweets", Context.MODE_PRIVATE);
-        String userName = preferences.getString("user", "");
-        String screenName = preferences.getString("screen", "");
-        String profileUrl = preferences.getString("profile", "");
+        // SharedPreferences preferences = getApplicationContext()
+        //        .getSharedPreferences("cpsimpletweets", Context.MODE_PRIVATE);
+        // String userName = preferences.getString("user", "");
+        // String screenName = preferences.getString("screen", "");
+        // String profileUrl = preferences.getString("profile", "");
+
+        User owner = TwitterApplication.getOwner();
+        String userName = owner.getName();
+        String screenName = owner.getScreenName();
+        String profileUrl = owner.getProfileImageUrl();
+
 
         Intent intent = getIntent();
         uid = intent.getLongExtra("uid", 0);
