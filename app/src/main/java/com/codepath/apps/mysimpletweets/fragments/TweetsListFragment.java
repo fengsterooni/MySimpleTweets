@@ -96,21 +96,17 @@ public abstract class TweetsListFragment extends Fragment {
     }
 
     private void fetchTimelineAsync(int i) {
-        populateTimeline(0, 1);
+        populateTimeline(0);
     }
-
-
 
     private void customLoadMoreDataFromApi(int offset) {
         long maxId = 0;
-        long sinceId = 0;
         int count = tweets.size();
         if (count > 0) {
             maxId = tweets.get(count - 1).getUid() - 1;
-            sinceId = 1;
         }
 
-        populateTimeline(maxId, sinceId);
+        populateTimeline(maxId);
     }
 
 
@@ -140,5 +136,5 @@ public abstract class TweetsListFragment extends Fragment {
         aTweets.clear();
     }
 
-    abstract void populateTimeline(long maxId, long sinceId);
+    abstract void populateTimeline(long maxId);
 }

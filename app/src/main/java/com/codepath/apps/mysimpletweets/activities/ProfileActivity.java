@@ -38,17 +38,26 @@ public class ProfileActivity extends ActionBarActivity {
 
         ButterKnife.inject(this);
 
+        /*
         user = TwitterApplication.getOwner();
         getSupportActionBar().setTitle("@" + user.getScreenName());
         populateProfileHeader(user);
+        */
+        user = getIntent().getParcelableExtra("user");
+        if (user == null)
+            user = TwitterApplication.getOwner();
 
-        String screenName = getIntent().getStringExtra("screen_name");
+        if (user != null) {
+            String screenName = user.getScreenName();
+            getSupportActionBar().setTitle("@" + screenName);
+            populateProfileHeader(user);
 
-        if (savedInstanceState == null) {
-            UserTimelineFragment fragment = UserTimelineFragment.newInstance(screenName);
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.flContainer, fragment);
-            ft.commit();
+            if (savedInstanceState == null) {
+                UserTimelineFragment fragment = UserTimelineFragment.newInstance(screenName);
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.flContainer, fragment);
+                ft.commit();
+            }
         }
     }
 

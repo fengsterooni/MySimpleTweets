@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.activities.ComposeActivity;
+import com.codepath.apps.mysimpletweets.activities.ProfileActivity;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.models.User;
 import com.codepath.apps.mysimpletweets.views.LinkifiedTextView;
@@ -26,6 +27,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 public class TweetsArrayAdapter extends ArrayAdapter<Tweet>{
+    private static User user;
 
     static class ViewHolder {
         @InjectView(R.id.ivProfileImage)
@@ -61,7 +63,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet>{
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final Tweet tweet = getItem(position);
-        ViewHolder viewHolder;
+        final ViewHolder viewHolder;
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_tweet, parent, false);
             viewHolder = new ViewHolder(convertView);
@@ -70,11 +72,12 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet>{
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        User user = tweet.getUser();
+        user = tweet.getUser();
         viewHolder.userName.setText("@" + user.getScreenName());
         viewHolder.screenName.setText(user.getName());
         viewHolder.body.setText(tweet.getBody());
         viewHolder.profileImage.setImageResource(android.R.color.transparent);
+        viewHolder.profileImage.setTag(user);
         Picasso.with(getContext()).load(user.getProfileImageUrl()).into(viewHolder.profileImage);
         viewHolder.time.setText(getRelativeTimeAgo(tweet.getCreatedAt()));
         viewHolder.numRetweet.setText("" + tweet.getNumRetweet());
@@ -86,6 +89,15 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet>{
                 Intent intent = new Intent(getContext(), ComposeActivity.class);
                 intent.putExtra("uid", tweet.getUid());
                 intent.putExtra("user", tweet.getUser().getScreenName());
+                getContext().startActivity(intent);
+            }
+        });
+        viewHolder.profileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                User user = (User) viewHolder.profileImage.getTag();
+                Intent intent = new Intent(getContext(), ProfileActivity.class);
+                intent.putExtra("user", user);
                 getContext().startActivity(intent);
             }
         });

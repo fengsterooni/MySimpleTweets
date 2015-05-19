@@ -34,15 +34,16 @@ public class TwitterClient extends OAuthBaseClient {
         super(context, REST_API_CLASS, REST_URL, REST_CONSUMER_KEY, REST_CONSUMER_SECRET, REST_CALLBACK_URL);
     }
 
-    public void getHomeTimeline(long maxId, long sinceId, AsyncHttpResponseHandler handler) {
+    public void getHomeTimeline(long maxId, AsyncHttpResponseHandler handler) {
         String apiUrl = getApiUrl("statuses/home_timeline.json");
         // Can specify query string params directly or through RequestParams.
         RequestParams params = new RequestParams();
-        // params.put("count", 25);
+        params.put("count", 25);
         if (maxId > 0)
             params.put("max_id", maxId);
-
-        params.put("since_id", sinceId);
+        else {
+            params.put("since_id", 1);
+        }
         client.get(apiUrl, params, handler);
         Log.i("INFO", apiUrl);
     }
@@ -51,20 +52,28 @@ public class TwitterClient extends OAuthBaseClient {
         String apiUrl = getApiUrl("statuses/mentions_timeline.json");
         // Can specify query string params directly or through RequestParams.
         RequestParams params = new RequestParams();
-        // params.put("count", 25);
+        params.put("count", 25);
         if (maxId > 0)
             params.put("max_id", maxId);
-
+        else {
+            params.put("since_id", 1);
+        }
         client.get(apiUrl, params, handler);
         Log.i("INFO", apiUrl);
     }
 
-    public void getUserTimeline(String userName, AsyncHttpResponseHandler handler) {
+    public void getUserTimeline(String userName, long maxId, AsyncHttpResponseHandler handler) {
         String apiUrl = getApiUrl("statuses/user_timeline.json");
         // Can specify query string params directly or through RequestParams.
         RequestParams params = new RequestParams();
-
-        client.get(apiUrl, null, handler);
+        params.put("screen_name", userName);
+        params.put("count", 25);
+        if (maxId > 0)
+            params.put("max_id", maxId);
+        else {
+            params.put("since_id", 1);
+        }
+        client.get(apiUrl, params, handler);
         Log.i("INFO", apiUrl);
     }
 

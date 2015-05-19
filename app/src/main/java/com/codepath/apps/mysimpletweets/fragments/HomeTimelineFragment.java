@@ -27,7 +27,7 @@ public class HomeTimelineFragment extends TweetsListFragment{
         client = TwitterApplication.getRestClient();
 
         if (TwitterApplication.isNetworkAvailable()) {
-            populateTimeline(0, 1);
+            populateTimeline(0);
 
         } else {
             new MaterialDialog.Builder(getActivity())
@@ -44,9 +44,9 @@ public class HomeTimelineFragment extends TweetsListFragment{
         }
     }
 
-    void populateTimeline(final long maxId, long sinceId) {
+    void populateTimeline(final long maxId) {
 
-        client.getHomeTimeline(maxId, sinceId, new JsonHttpResponseHandler() {
+        client.getHomeTimeline(maxId, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
 

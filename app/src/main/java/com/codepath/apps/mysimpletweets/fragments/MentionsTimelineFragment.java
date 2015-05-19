@@ -27,7 +27,7 @@ public class MentionsTimelineFragment extends TweetsListFragment{
         client = TwitterApplication.getRestClient();
 
         if (TwitterApplication.isNetworkAvailable()) {
-            populateTimeline(0, 1);
+            populateTimeline(0);
 
         } else {
             new MaterialDialog.Builder(getActivity())
@@ -35,7 +35,8 @@ public class MentionsTimelineFragment extends TweetsListFragment{
                     .content(R.string.no_network_activate)
                     .positiveText(R.string.OK)
                     .show();
-            List<Tweet> queryResults = new Select().from(Tweet.class)
+            List<Tweet> queryResults = new Select()
+                    .from(Tweet.class)
                     .execute();
             Log.i("INFO", "queryResults SIZE " + queryResults.size());
             if (queryResults.size() > 0) {
@@ -44,7 +45,7 @@ public class MentionsTimelineFragment extends TweetsListFragment{
         }
     }
 
-    void populateTimeline(final long maxId, long sinceId) {
+    void populateTimeline(final long maxId) {
 
         client.getMentionsTimeline(maxId, 0, new JsonHttpResponseHandler() {
             @Override

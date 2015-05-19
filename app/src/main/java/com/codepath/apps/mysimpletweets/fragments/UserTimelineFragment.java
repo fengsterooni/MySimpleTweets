@@ -10,6 +10,7 @@ import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.TwitterApplication;
 import com.codepath.apps.mysimpletweets.TwitterClient;
 import com.codepath.apps.mysimpletweets.models.Tweet;
+import com.codepath.apps.mysimpletweets.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;
@@ -34,9 +35,10 @@ public class UserTimelineFragment extends TweetsListFragment{
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         client = TwitterApplication.getRestClient();
+        User user = TwitterApplication.getOwner();
 
         if (TwitterApplication.isNetworkAvailable()) {
-            populateTimeline(0, 1);
+            populateTimeline(0);
 
         } else {
             new MaterialDialog.Builder(getActivity())
@@ -44,7 +46,9 @@ public class UserTimelineFragment extends TweetsListFragment{
                     .content(R.string.no_network_activate)
                     .positiveText(R.string.OK)
                     .show();
-            List<Tweet> queryResults = new Select().from(Tweet.class)
+            List<Tweet> queryResults = new Select()
+                    .from(Tweet.class)
+                    //.where("User = ?", user)
                     .execute();
             Log.i("INFO", "queryResults SIZE " + queryResults.size());
             if (queryResults.size() > 0) {
@@ -53,9 +57,9 @@ public class UserTimelineFragment extends TweetsListFragment{
         }
     }
 
-    void populateTimeline(final long maxId, long sinceId) {
+    void populateTimeline(final long maxId) {
         String screenName = getArguments().getString("screen_name");
-        client.getUserTimeline(screenName, new JsonHttpResponseHandler() {
+        client.getUserTimeline(screenName, maxId, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
 
