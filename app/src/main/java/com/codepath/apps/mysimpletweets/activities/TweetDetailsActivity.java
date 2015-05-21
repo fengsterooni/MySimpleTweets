@@ -61,10 +61,18 @@ public class TweetDetailsActivity extends ActionBarActivity {
 
         final Tweet tweet = getIntent().getParcelableExtra("tweet");
         if (tweet != null) {
-            User user = tweet.getUser();
+            final User user = tweet.getUser();
             userName.setText(user.getName());
             screenName.setText("@" + user.getScreenName());
             Picasso.with(TweetDetailsActivity.this).load(user.getProfileImageUrl()).into(profileImage);
+            profileImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(TweetDetailsActivity.this, ProfileActivity.class);
+                    intent.putExtra("user", user);
+                    startActivity(intent);
+                }
+            });
             body.setText(tweet.getBody());
             Date date = DateUtils.getDateFromString(tweet.getCreatedAt());
             time.setText(DateUtils.getShortDateTimeString(date));

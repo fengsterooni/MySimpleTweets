@@ -41,6 +41,8 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet>{
         LinkifiedTextView body;
         @InjectView(R.id.tvTime)
         TextView time;
+        @InjectView(R.id.ivTweetImage)
+        ImageView tweetImage;
         @InjectView(R.id.ivReplyItem)
         ImageView replyItem;
         @InjectView(R.id.ivRetweetItem)
@@ -102,6 +104,16 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet>{
                 getContext().startActivity(intent);
             }
         });
+
+        if (tweet.getMediaUrl() != null) {
+            viewHolder.tweetImage.setVisibility(View.VISIBLE);
+            viewHolder.tweetImage
+                    .setImageResource(android.R.color.transparent);
+            Picasso.with(getContext()).load(tweet.getMediaUrl()).into(viewHolder.tweetImage);
+        } else {
+            viewHolder.tweetImage.setVisibility(View.GONE);
+        }
+
         return convertView;
     }
 

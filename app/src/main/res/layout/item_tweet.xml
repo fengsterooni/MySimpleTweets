@@ -64,11 +64,22 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
     <ImageView
+        android:id="@+id/ivTweetImage"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:layout_marginTop="8dp"
+        android:layout_below="@id/tvBody"
+        android:scaleType="centerCrop"
+        android:layout_toEndOf="@id/ivProfileImage"
+        android:layout_toRightOf="@id/ivProfileImage" />
+
+
+    <ImageView
         android:id="@+id/ivReplyItem"
         android:layout_width="16dp"
         android:layout_height="16dp"
         android:layout_alignLeft="@id/tvScreenName"
-        android:layout_below="@id/tvBody"
+        android:layout_below="@id/ivTweetImage"
         android:layout_marginTop="8dp"
         android:src="@drawable/reply_hover" />
 
