@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     tools:context="com.codepath.apps.mysimpletweets.activities.ProfileActivity">
 
     <RelativeLayout
@@ -46,11 +47,13 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Followers"
             android:id="@+id/tvFollowers"
             android:layout_marginRight="16dp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Followings"
             android:id="@+id/tvFollowing"/>
     </LinearLayout>
 

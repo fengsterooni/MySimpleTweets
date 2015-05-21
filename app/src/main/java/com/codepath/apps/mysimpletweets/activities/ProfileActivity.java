@@ -1,10 +1,12 @@
 package com.codepath.apps.mysimpletweets.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -38,11 +40,6 @@ public class ProfileActivity extends ActionBarActivity {
 
         ButterKnife.inject(this);
 
-        /*
-        user = TwitterApplication.getOwner();
-        getSupportActionBar().setTitle("@" + user.getScreenName());
-        populateProfileHeader(user);
-        */
         user = getIntent().getParcelableExtra("user");
         if (user == null)
             user = TwitterApplication.getOwner();
@@ -66,7 +63,33 @@ public class ProfileActivity extends ActionBarActivity {
         tvTagLine.setText(user.getTagLine());
         Picasso.with(this).load(user.getProfileImageUrl()).into(ivProfile);
         tvFollowers.setText(user.getFollowersCount() + " Followers");
+        tvFollowers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onFollower();
+            }
+        });
         tvFollowing.setText(user.getFriendsCount() + " Followings");
+        tvFollowing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onFollowing();
+            }
+        });
+    }
+
+    public void onFollowing() {
+        Intent intent = new Intent(this, UsersListActivity.class);
+        intent.putExtra("user", user);
+        intent.putExtra("flag", "following");
+        startActivity(intent);
+    }
+
+    public void onFollower() {
+        Intent intent = new Intent(this, UsersListActivity.class);
+        intent.putExtra("user", user);
+        intent.putExtra("flag", "follower");
+        startActivity(intent);
     }
 
     @Override
