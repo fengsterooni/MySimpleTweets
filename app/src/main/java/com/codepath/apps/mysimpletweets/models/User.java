@@ -25,6 +25,8 @@ public class User extends Model implements Parcelable{
     private String screenName;
     @Column(name = "ProfileImageUrl")
     private String profileImageUrl;
+    @Column(name = "BackgroundImageUrl")
+    private String backgroundImageUrl;
     @Column(name = "TagLine")
     private String tagLine;
     @Column(name = "Follower")
@@ -39,6 +41,7 @@ public class User extends Model implements Parcelable{
             user.uid = json.getLong("id");
             user.screenName = json.getString("screen_name");
             user.profileImageUrl = json.getString("profile_image_url");
+            user.backgroundImageUrl = json.getString("profile_background_image_url");
             user.tagLine = json.getString("description");
             user.followersCount = json.getInt("followers_count");
             user.followingsCount = json.getInt("friends_count");
@@ -83,24 +86,16 @@ public class User extends Model implements Parcelable{
         return users;
     }
 
-    public static ArrayList<User> fromJSONCursor(JSONObject json) {
-
-        JSONArray jsonArray = null;
-        try {
-            jsonArray = json.getJSONArray("users");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return fromJSONArray(jsonArray);
-    }
-
     public String getName() {
         return name;
     }
 
     public String getProfileImageUrl() {
         return profileImageUrl;
+    }
+
+    public String getBackgroundImageUrl() {
+        return backgroundImageUrl;
     }
 
     public String getScreenName() {
@@ -135,6 +130,7 @@ public class User extends Model implements Parcelable{
         dest.writeString(this.name);
         dest.writeString(this.screenName);
         dest.writeString(this.profileImageUrl);
+        dest.writeString(this.backgroundImageUrl);
         dest.writeString(this.tagLine);
         dest.writeInt(this.followersCount);
         dest.writeInt(this.followingsCount);
@@ -148,6 +144,7 @@ public class User extends Model implements Parcelable{
         this.name = in.readString();
         this.screenName = in.readString();
         this.profileImageUrl = in.readString();
+        this.backgroundImageUrl = in.readString();
         this.tagLine = in.readString();
         this.followersCount = in.readInt();
         this.followingsCount = in.readInt();

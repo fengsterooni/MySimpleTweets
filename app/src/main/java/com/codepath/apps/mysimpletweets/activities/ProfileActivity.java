@@ -1,35 +1,21 @@
 package com.codepath.apps.mysimpletweets.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.TwitterApplication;
+import com.codepath.apps.mysimpletweets.fragments.ProfileHeaderFragment;
 import com.codepath.apps.mysimpletweets.fragments.UserTimelineFragment;
 import com.codepath.apps.mysimpletweets.models.User;
-import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 public class ProfileActivity extends ActionBarActivity {
-    @InjectView(R.id.ivProfileImage)
-    ImageView ivProfile;
-    @InjectView(R.id.tvUserName)
-    TextView tvName;
-    @InjectView(R.id.tvTagline)
-    TextView tvTagLine;
-    @InjectView(R.id.tvFollowers)
-    TextView tvFollowers;
-    @InjectView(R.id.tvFollowing)
-    TextView tvFollowing;
+
 
     User user;
 
@@ -38,7 +24,12 @@ public class ProfileActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        getSupportActionBar().hide();
+
         ButterKnife.inject(this);
+
+        ProfileHeaderFragment headerFragment = (ProfileHeaderFragment)
+                getSupportFragmentManager().findFragmentById(R.id.flProfileHeader);
 
         user = getIntent().getParcelableExtra("user");
         if (user == null)
@@ -47,7 +38,10 @@ public class ProfileActivity extends ActionBarActivity {
         if (user != null) {
             String screenName = user.getScreenName();
             getSupportActionBar().setTitle("@" + screenName);
-            populateProfileHeader(user);
+
+            headerFragment.setUser(user);
+
+            headerFragment.populateHeader();
 
             if (savedInstanceState == null) {
                 UserTimelineFragment fragment = UserTimelineFragment.newInstance(screenName);
@@ -58,39 +52,6 @@ public class ProfileActivity extends ActionBarActivity {
         }
     }
 
-    private void populateProfileHeader(User user) {
-        tvName.setText(user.getName());
-        tvTagLine.setText(user.getTagLine());
-        Picasso.with(this).load(user.getProfileImageUrl()).into(ivProfile);
-        tvFollowers.setText(user.getFollowersCount() + " Followers");
-        tvFollowers.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onFollower();
-            }
-        });
-        tvFollowing.setText(user.getFriendsCount() + " Followings");
-        tvFollowing.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onFollowing();
-            }
-        });
-    }
-
-    public void onFollowing() {
-        Intent intent = new Intent(this, UsersListActivity.class);
-        intent.putExtra("user", user);
-        intent.putExtra("flag", "following");
-        startActivity(intent);
-    }
-
-    public void onFollower() {
-        Intent intent = new Intent(this, UsersListActivity.class);
-        intent.putExtra("user", user);
-        intent.putExtra("flag", "follower");
-        startActivity(intent);
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
