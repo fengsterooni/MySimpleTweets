@@ -3,7 +3,11 @@ package com.codepath.apps.mysimpletweets.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.TwitterApplication;
 import com.codepath.apps.mysimpletweets.TwitterClient;
 import com.codepath.apps.mysimpletweets.models.User;
@@ -13,9 +17,13 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import org.apache.http.Header;
 import org.json.JSONObject;
 
-public class FriendsListFragment extends UsersListFragment {
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
+public class FriendsListFragment extends UsersListFragment {
     private TwitterClient client;
+    @InjectView(R.id.pbSpinner)
+    ProgressBar progressBar;
 
     public static FriendsListFragment newInstance(String screen_name) {
         FriendsListFragment fragment = new FriendsListFragment();
@@ -28,33 +36,19 @@ public class FriendsListFragment extends UsersListFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ButterKnife.inject(getActivity());
         client = TwitterApplication.getRestClient();
 
-        //User user = getActivity().getIntent().getParcelableExtra("user");
-        //String screenName = user.getScreenName();
-
-        // String screenName = getArguments().getString("screen_name");
-
-
-        populateUserList(-1);
-
-        /*
         if (TwitterApplication.isNetworkAvailable()) {
-            populateUserList(0);
+            populateUserList(-1);
 
         } else {
             new MaterialDialog.Builder(getActivity())
                     .title(R.string.no_network_title)
-                    .content(R.string.no_network_activate)
+                    .content(R.string.no_network_message)
                     .positiveText(R.string.OK)
                     .show();
-            List<Tweet> queryResults = new Select().from(Tweet.class)
-                    .execute();
-            Log.i("INFO", "queryResults SIZE " + queryResults.size());
-            if (queryResults.size() > 0) {
-                addAll(queryResults);
-            }
-        } */
+        }
     }
 
     @Override
@@ -66,6 +60,7 @@ public class FriendsListFragment extends UsersListFragment {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
+                progressBar.setVisibility(View.GONE);
                 list = UserList.fromJSON(json);
                 addAll(list.getUsers());
             }

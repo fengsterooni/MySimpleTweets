@@ -3,6 +3,8 @@ package com.codepath.apps.mysimpletweets.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.activeandroid.query.Select;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -19,9 +21,13 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-public class UserTimelineFragment extends TweetsListFragment{
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
+public class UserTimelineFragment extends TweetsListFragment{
     private TwitterClient client;
+    @InjectView(R.id.pbSpinner)
+    ProgressBar progressBar;
 
     public static UserTimelineFragment newInstance(String screen_name) {
         UserTimelineFragment fragment = new UserTimelineFragment();
@@ -34,6 +40,7 @@ public class UserTimelineFragment extends TweetsListFragment{
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ButterKnife.inject(getActivity());
         client = TwitterApplication.getRestClient();
         User user = TwitterApplication.getOwner();
 
@@ -43,7 +50,7 @@ public class UserTimelineFragment extends TweetsListFragment{
         } else {
             new MaterialDialog.Builder(getActivity())
                     .title(R.string.no_network_title)
-                    .content(R.string.no_network_activate)
+                    .content(R.string.no_network_message)
                     .positiveText(R.string.OK)
                     .show();
             List<Tweet> queryResults = new Select()
@@ -62,7 +69,7 @@ public class UserTimelineFragment extends TweetsListFragment{
         client.getUserTimeline(screenName, maxId, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
-
+                progressBar.setVisibility(View.GONE);
                 if (maxId == 0)
                     clear();
 

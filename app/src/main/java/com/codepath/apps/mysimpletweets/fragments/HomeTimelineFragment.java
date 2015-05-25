@@ -3,6 +3,8 @@ package com.codepath.apps.mysimpletweets.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.activeandroid.query.Select;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -18,12 +20,18 @@ import org.json.JSONObject;
 
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 public class HomeTimelineFragment extends TweetsListFragment{
     private TwitterClient client;
+    @InjectView(R.id.pbSpinner)
+    ProgressBar progressBar;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ButterKnife.inject(getActivity());
         client = TwitterApplication.getRestClient();
 
         if (TwitterApplication.isNetworkAvailable()) {
@@ -45,11 +53,10 @@ public class HomeTimelineFragment extends TweetsListFragment{
     }
 
     void populateTimeline(final long maxId) {
-
         client.getHomeTimeline(maxId, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
-
+                progressBar.setVisibility(View.GONE);
                 if (maxId == 0)
                     clear();
 

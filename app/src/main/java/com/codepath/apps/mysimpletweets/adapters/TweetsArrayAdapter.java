@@ -83,8 +83,30 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet>{
         viewHolder.profileImage.setTag(user);
         Picasso.with(getContext()).load(user.getProfileImageUrl()).into(viewHolder.profileImage);
         viewHolder.time.setText(getRelativeTimeAgo(tweet.getCreatedAt()));
-        viewHolder.numRetweet.setText("" + tweet.getNumRetweet());
-        viewHolder.numFavorites.setText("" + tweet.getNumFavorites());
+
+        final long numFavorite = tweet.getNumFavorites();
+        final long numRetweet = tweet.getNumRetweet();
+        final long uid = tweet.getUid();
+        viewHolder.numRetweet.setText("" + numRetweet);
+        viewHolder.numFavorites.setText("" + numFavorite);
+
+        if (tweet.isFavorited())
+            viewHolder.favoriteItem.setImageResource(R.drawable.favorite_on);
+        viewHolder.favoriteItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (tweet.isFavorited()) {
+                    viewHolder.numFavorites.setText("" + (numFavorite - 1));
+                    viewHolder.favoriteItem.setImageResource(R.drawable.favorite);
+                    // unfavoriteTweet(uid);
+                }
+                else {
+                    viewHolder.numFavorites.setText("" + (numFavorite + 1));
+                    viewHolder.favoriteItem.setImageResource(R.drawable.favorite_on);
+                    // favoriteTweet(uid);
+                }
+            }
+        });
 
         viewHolder.replyItem.setOnClickListener(new View.OnClickListener() {
             @Override

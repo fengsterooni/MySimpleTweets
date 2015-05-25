@@ -81,7 +81,7 @@
         android:layout_alignLeft="@id/tvScreenName"
         android:layout_below="@id/ivTweetImage"
         android:layout_marginTop="8dp"
-        android:src="@drawable/reply_hover" />
+        android:src="@drawable/reply" />
 
     <ImageView
         android:id="@+id/ivRetweetItem"
@@ -91,7 +91,7 @@
         android:layout_marginLeft="64dp"
         android:layout_marginRight="8dp"
         android:layout_toRightOf="@id/ivReplyItem"
-        android:src="@drawable/retweet_hover" />
+        android:src="@drawable/retweet" />
 
     <TextView
         android:id="@+id/tvNumRetweetItem"
@@ -110,7 +110,7 @@
         android:layout_alignTop="@id/ivReplyItem"
         android:layout_marginRight="8dp"
         android:layout_toRightOf="@id/tvNumRetweetItem"
-        android:src="@drawable/favorite_hover" />
+        android:src="@drawable/favorite" />
 
     <TextView
         android:id="@+id/tvNumFavoritesItem"

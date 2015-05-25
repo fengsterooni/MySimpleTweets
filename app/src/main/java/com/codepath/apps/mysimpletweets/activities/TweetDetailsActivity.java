@@ -3,6 +3,7 @@ package com.codepath.apps.mysimpletweets.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,11 +12,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codepath.apps.mysimpletweets.R;
+import com.codepath.apps.mysimpletweets.TwitterApplication;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.models.User;
 import com.codepath.apps.mysimpletweets.utils.DateUtils;
 import com.codepath.apps.mysimpletweets.views.LinkifiedTextView;
+import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.squareup.picasso.Picasso;
+
+import org.apache.http.Header;
 
 import java.util.Date;
 
@@ -48,6 +53,10 @@ public class TweetDetailsActivity extends ActionBarActivity {
     @InjectView(R.id.etDetailReply)
     EditText etReply;
 
+    boolean favorite;
+    static Tweet tweet;
+    long numFavorite;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +68,7 @@ public class TweetDetailsActivity extends ActionBarActivity {
 
         ButterKnife.inject(this);
 
-        final Tweet tweet = getIntent().getParcelableExtra("tweet");
+        tweet = getIntent().getParcelableExtra("tweet");
         if (tweet != null) {
             final User user = tweet.getUser();
             userName.setText(user.getName());
@@ -76,8 +85,9 @@ public class TweetDetailsActivity extends ActionBarActivity {
             body.setText(tweet.getBody());
             Date date = DateUtils.getDateFromString(tweet.getCreatedAt());
             time.setText(DateUtils.getShortDateTimeString(date));
+            numFavorite = tweet.getNumFavorites();
             retweets.setText("" + tweet.getNumRetweet());
-            favorites.setText("" + tweet.getNumFavorites());
+            favorites.setText("" + numFavorite);
             iVReply.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -90,6 +100,66 @@ public class TweetDetailsActivity extends ActionBarActivity {
                     reply(tweet);
                 }
             });
+
+            favorite = tweet.isFavorited();
+            if (favorite) {
+                ivFavorite.setImageResource(R.drawable.favorite_on);
+            } else {
+                ivFavorite.setImageResource(R.drawable.favorite);
+            }
+
+            ivFavorite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (favorite) {
+                        Log.i("INFO", "Unfavor");
+                        ivFavorite.setImageResource(R.drawable.favorite);
+                        numFavorite -= 1;
+                        favorites.setText("" + numFavorite);
+                    } else {
+                        Log.i("INFO", "Favor");
+                        ivFavorite.setImageResource(R.drawable.favorite_on);
+                        numFavorite += 1;
+                        favorites.setText("" + numFavorite);
+                    }
+                    favorite = !favorite;
+                }
+            });
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (favorite != tweet.isFavorited()) {
+            if (favorite) {
+                TwitterApplication.getRestClient().postFavoriteCreate(tweet.getUid(), new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+                    }
+                });
+                Log.i("INFO", "Favorited");
+            }
+            else {
+                TwitterApplication.getRestClient().postFavoriteDestory(tweet.getUid(), new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+                    }
+                });
+                Log.i("INFO", "Unfavorited");
+            }
         }
     }
 

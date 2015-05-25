@@ -36,6 +36,12 @@
             android:src="@drawable/ic_camera_alt_black_24dp" />
     </LinearLayout>
 
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pbSpinner"
+        android:layout_centerInParent="true"/>
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeContainter"
         android:layout_width="match_parent"
