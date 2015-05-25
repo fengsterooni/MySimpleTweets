@@ -36,6 +36,8 @@ public class TweetDetailsActivity extends ActionBarActivity {
     TextView screenName;
     @InjectView(R.id.tvBody)
     LinkifiedTextView body;
+    @InjectView(R.id.ivTweetImage)
+    ImageView tweetImage;
     @InjectView(R.id.tvTime)
     TextView time;
     @InjectView(R.id.tvNumRetweet)
@@ -100,6 +102,16 @@ public class TweetDetailsActivity extends ActionBarActivity {
                     reply(tweet);
                 }
             });
+            etReply.setHint("Reply to " + user.getName());
+
+            if (tweet.getMediaUrl() != null) {
+                tweetImage.setVisibility(View.VISIBLE);
+                tweetImage
+                        .setImageResource(android.R.color.transparent);
+                Picasso.with(TweetDetailsActivity.this).load(tweet.getMediaUrl()).into(tweetImage);
+            } else {
+                tweetImage.setVisibility(View.GONE);
+            }
 
             favorite = tweet.isFavorited();
             if (favorite) {
