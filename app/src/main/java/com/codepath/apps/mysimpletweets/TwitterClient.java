@@ -112,6 +112,20 @@ public class TwitterClient extends OAuthBaseClient {
         Log.i("INFO", apiUrl);
     }
 
+    public void getDirectMessages(long maxId, AsyncHttpResponseHandler handler) {
+        String apiUrl = getApiUrl("direct_messages.json");
+        // Can specify query string params directly or through RequestParams.
+        RequestParams params = new RequestParams();
+        params.put("count", 25);
+        if (maxId > 0)
+            params.put("max_id", maxId);
+        else {
+            params.put("since_id", 1);
+        }
+        client.get(apiUrl, params, handler);
+        Log.i("INFO", apiUrl);
+    }
+
     public void postFavoriteCreate(long uid, AsyncHttpResponseHandler handler) {
         String apiUrl = getApiUrl("favorites/create.json");
         RequestParams params = new RequestParams();

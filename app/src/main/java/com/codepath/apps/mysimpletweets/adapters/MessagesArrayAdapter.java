@@ -11,11 +11,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codepath.apps.mysimpletweets.R;
-import com.codepath.apps.mysimpletweets.activities.ComposeActivity;
 import com.codepath.apps.mysimpletweets.activities.ProfileActivity;
-import com.codepath.apps.mysimpletweets.models.Tweet;
+import com.codepath.apps.mysimpletweets.models.Message;
 import com.codepath.apps.mysimpletweets.models.User;
-import com.codepath.apps.mysimpletweets.views.LinkifiedTextView;
 import com.squareup.picasso.Picasso;
 
 import org.ocpsoft.prettytime.PrettyTime;
@@ -29,7 +27,7 @@ import java.util.Locale;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class TweetsArrayAdapter extends ArrayAdapter<Tweet>{
+public class MessagesArrayAdapter extends ArrayAdapter<Message>{
     private static User user;
 
     static class ViewHolder {
@@ -40,85 +38,40 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet>{
         @InjectView(R.id.tvScreenName)
         TextView screenName;
         @InjectView(R.id.tvBody)
-        LinkifiedTextView body;
+        TextView body;
         @InjectView(R.id.tvTime)
         TextView time;
-        @InjectView(R.id.ivTweetImage)
-        ImageView tweetImage;
-        @InjectView(R.id.ivReplyItem)
-        ImageView replyItem;
-        @InjectView(R.id.ivRetweetItem)
-        ImageView retweetItem;
-        @InjectView(R.id.tvNumRetweetItem)
-        TextView numRetweet;
-        @InjectView(R.id.ivFavoriteItem)
-        ImageView favoriteItem;
-        @InjectView(R.id.tvNumFavoritesItem)
-        TextView numFavorites;
 
         public ViewHolder(View view) {
             ButterKnife.inject(this, view);
         }
     }
 
-    public TweetsArrayAdapter(Context context, List<Tweet> tweets) {
-        super(context, android.R.layout.simple_list_item_1, tweets);
+    public MessagesArrayAdapter(Context context, List<Message> messages) {
+        super(context, android.R.layout.simple_list_item_1, messages);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        final Tweet tweet = getItem(position);
+        final Message message = getItem(position);
         final ViewHolder viewHolder;
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_tweet, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_message, parent, false);
             viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        user = tweet.getUser();
+        user = message.getSender();
         viewHolder.userName.setText("@" + user.getScreenName());
         viewHolder.screenName.setText(user.getName());
-        viewHolder.body.setText(tweet.getBody());
+        viewHolder.body.setText(message.getBody());
         viewHolder.profileImage.setImageResource(android.R.color.transparent);
         viewHolder.profileImage.setTag(user);
         Picasso.with(getContext()).load(user.getProfileImageUrl()).into(viewHolder.profileImage);
-        viewHolder.time.setText(getRelativeTimeAgo(tweet.getCreatedAt()));
-
-        final long numFavorite = tweet.getNumFavorites();
-        final long numRetweet = tweet.getNumRetweet();
-        final long uid = tweet.getUid();
-        viewHolder.numRetweet.setText("" + numRetweet);
-        viewHolder.numFavorites.setText("" + numFavorite);
-
-        if (tweet.isFavorited())
-            viewHolder.favoriteItem.setImageResource(R.drawable.favorite_on);
-        viewHolder.favoriteItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (tweet.isFavorited()) {
-                    viewHolder.numFavorites.setText("" + (numFavorite - 1));
-                    viewHolder.favoriteItem.setImageResource(R.drawable.favorite);
-                    // unfavoriteTweet(uid);
-                }
-                else {
-                    viewHolder.numFavorites.setText("" + (numFavorite + 1));
-                    viewHolder.favoriteItem.setImageResource(R.drawable.favorite_on);
-                    // favoriteTweet(uid);
-                }
-            }
-        });
-
-        viewHolder.replyItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), ComposeActivity.class);
-                intent.putExtra("uid", tweet.getUid());
-                intent.putExtra("user", tweet.getUser().getScreenName());
-                getContext().startActivity(intent);
-            }
-        });
+        viewHolder.time.setText(getRelativeTimeAgo(message.getCreatedAt()));
+        
         viewHolder.profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,16 +81,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet>{
                 getContext().startActivity(intent);
             }
         });
-
-        if (tweet.getMediaUrl() != null) {
-            viewHolder.tweetImage.setVisibility(View.VISIBLE);
-            viewHolder.tweetImage
-                    .setImageResource(android.R.color.transparent);
-            Picasso.with(getContext()).load(tweet.getMediaUrl()).into(viewHolder.tweetImage);
-        } else {
-            viewHolder.tweetImage.setVisibility(View.GONE);
-        }
-
+        
         return convertView;
     }
 

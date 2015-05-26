@@ -80,6 +80,10 @@
             android:name=".activities.UsersListActivity"
             android:label="@string/title_activity_users_list" >
         </activity>
+        <activity
+            android:name=".activities.MessageActivity"
+            android:label="@string/title_activity_message" >
+        </activity>
     </application>
 
 </manifest>

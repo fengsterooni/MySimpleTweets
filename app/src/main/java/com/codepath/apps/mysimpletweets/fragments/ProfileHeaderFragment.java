@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,6 +63,9 @@ public class ProfileHeaderFragment extends Fragment {
         tvTagLine.setText(user.getTagLine());
         Picasso.with(getActivity()).load(user.getProfileImageUrl()).into(ivProfile);
         Picasso.with(getActivity()).load(user.getBackgroundImageUrl()).into(ivBackground);
+
+        Log.i("INFO", user.getBackgroundImageUrl());
+
         tvNumFollower.setText(Html.fromHtml("<b>" + user.getFollowersCount() + "</b> FOLLOWERS"));
         tvNumFollower.setOnClickListener(new View.OnClickListener() {
             @Override
