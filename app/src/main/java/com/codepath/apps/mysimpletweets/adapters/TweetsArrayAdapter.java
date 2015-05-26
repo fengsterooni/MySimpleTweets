@@ -161,6 +161,8 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet>{
                 shortTimeString = relativeDate.substring(0, index) + "yr";
             else if (relativeDate.indexOf("month") > 0)
                 shortTimeString = relativeDate.substring(0, index) + "mo";
+            else if (relativeDate.contains("moments"))
+                shortTimeString = "<1m";
             else
                 shortTimeString = relativeDate.substring(0, index) + relativeDate.charAt(index + 1);
 
